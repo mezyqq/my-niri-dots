@@ -32,7 +32,7 @@ cd my-niri-dots
 | `config/kitty` | kitty с прозрачностью и темой noctalia |
 | `config/fastfetch`, `config/hyfetch.json`, `config/fetch`, `config/macchina` | fetch-утилиты с PNG-логотипом Gentoo / Tux |
 | `local/bin/hyfetch`, `local/bin/macchina` | обёртки: перекрашивают PNG-логотип в цвета флага / выводят картинку через kitty |
-| `local/bin/shot`, `tty1`, `3d-launcher` | скриншот через grim+slurp, выход в tty1, окно настроек модели лаунчера |
+| `local/bin/shot`, `tty1`, `3d-launcher`, `flameshot-niri` | скриншот через grim+slurp, выход в tty1, окно настроек модели лаунчера, flameshot (Super+Shift+S), который открывается и закрывается без анимации |
 | `fetch-src/` | форк [fetch](https://github.com/mezyqq/fetch-hyfetch): крутящаяся 3D-модель и цвета hyfetch |
 | `config/{fuzzel,rofi,flameshot,qt5ct,qt6ct,gtk-3.0,gtk-4.0,btop,zed,opencode,vesktop,waybar,neofetch}`, `kdeglobals`, `dolphinrc`, `mimeapps.list` | остальные конфиги и темы |
 | `home/.zshrc` | zsh: двухстрочный промпт, автоподсказки, команда `wallpaper <файл>` (копирует картинку в папку обоев) |

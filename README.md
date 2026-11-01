@@ -32,7 +32,7 @@ To copy only the files, without installing packages: `sh install/common.sh`.
 | `config/kitty` | kitty with transparency and the noctalia theme |
 | `config/fastfetch`, `config/hyfetch.json`, `config/fetch`, `config/macchina` | fetch tools with a PNG Gentoo / Tux logo |
 | `local/bin/hyfetch`, `local/bin/macchina` | wrappers: recolor the PNG logo in the flag colors / draw the image through kitty |
-| `local/bin/shot`, `tty1`, `3d-launcher` | screenshot via grim+slurp, drop to tty1, launcher model settings window |
+| `local/bin/shot`, `tty1`, `3d-launcher`, `flameshot-niri` | screenshot via grim+slurp, drop to tty1, launcher model settings window, flameshot (Super+Shift+S) that opens and closes with no animation |
 | `fetch-src/` | a fork of [fetch](https://github.com/mezyqq/fetch-hyfetch): spinning 3D model and hyfetch colors |
 | `config/{fuzzel,rofi,flameshot,qt5ct,qt6ct,gtk-3.0,gtk-4.0,btop,zed,opencode,vesktop,waybar,neofetch}`, `kdeglobals`, `dolphinrc`, `mimeapps.list` | other configs and themes |
 | `home/.zshrc` | zsh: two-line prompt, autosuggestions, `wallpaper <file>` command (copies an image into the wallpapers folder) |

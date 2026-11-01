@@ -1,0 +1,31 @@
+#!/bin/sh
+# Скриншот flameshot без въезда оверлея сбоку. Отключить анимацию для одного окна niri не умеет,
+# поэтому на время скриншота выключаем прокрутку вида, сдвиг окон и анимацию закрытия через подключаемый файл,
+# а когда окно flameshot закроется, включаем обратно.
+f="$HOME/.config/niri/flameshot-anim.kdl"
+off='animations {
+    horizontal-view-movement {
+        off
+    }
+    window-movement {
+        off
+    }
+    window-close {
+        off
+    }
+}'
+on='// Пусто. Скрипт flameshot-niri пишет сюда выключение прокрутки вида на время скриншота.'
+
+has_win() { niri msg -j windows | grep -q '"app_id": *"flameshot"'; }
+
+printf '%s\n' "$off" > "$f"
+sleep 0.15  # даём niri перечитать конфиг
+qs ipc -c serplauncher call launcher hide 2>/dev/null
+noctalia msg panel-close 2>/dev/null
+XDG_CURRENT_DESKTOP=sway QT_SCALE_FACTOR=0.8 flameshot gui &
+
+# ждём, пока окно появится (до 5 с), потом пока закроется; после этого возвращаем прокрутку
+i=0; until has_win || [ $i -ge 50 ]; do sleep 0.1; i=$((i+1)); done
+while has_win; do sleep 0.2; done
+sleep 0.5  # закрытие и прокрутка назад тоже без анимации
+printf '%s\n' "$on" > "$f"

@@ -325,11 +325,6 @@ animations {
     // Замедлить все анимации во столько раз. Значения меньше 1 их ускоряют.
     // slowdown 3.0
 
-    // Без прокрутки вида: иначе оверлей flameshot (новая колонка) въезжает сбоку.
-    horizontal-view-movement {
-        off
-    }
-
     // Стандартное открытие (рост + проявление), но окна, открытые сразу на весь экран
     // (оверлей flameshot), появляются мгновенно — в niri нет отключения анимации для одного окна.
     window-open {
@@ -699,7 +694,7 @@ binds {
     // Скриншот с редактором Flameshot; Enter — скопировать в буфер.
     // XDG_CURRENT_DESKTOP=sway — иначе flameshot не узнаёт niri и не включает захват через grim.
     // QT_SCALE_FACTOR=0.8 гасит масштаб 1.25 (1.25*0.8=1), иначе картинка в оверлее увеличена.
-    Mod+Shift+S hotkey-overlay-title="Скриншот: flameshot" { spawn-sh "qs ipc -c serplauncher call launcher hide; noctalia msg panel-close; XDG_CURRENT_DESKTOP=sway QT_SCALE_FACTOR=0.8 flameshot gui"; }
+    Mod+Shift+S hotkey-overlay-title="Скриншот: flameshot" { spawn-sh "$HOME/.local/bin/flameshot-niri"; }
 
     // Программы вроде клиентов удалённого рабочего стола и программных KVM могут
     // попросить niri перестать обрабатывать заданные здесь сочетания,
@@ -728,3 +723,5 @@ window-rule {
 }
 
 include "noctalia.kdl"
+// Временное выключение прокрутки вида на время скриншота (пишет ~/.local/bin/flameshot-niri).
+include "flameshot-anim.kdl"
