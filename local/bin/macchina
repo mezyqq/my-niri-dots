@@ -1,0 +1,8 @@
+#!/bin/sh
+real=$(PATH=$(printf %s "$PATH" | tr : '\n' | grep -vx "$(cd "$(dirname "$0")" && pwd)" | paste -sd:) command -v macchina) || { echo "macchina not installed" >&2; exit 127; }
+# macchina can't draw images: put the PNG at the cursor via kitty graphics protocol (C=1 = don't move cursor), then let macchina draw beside it
+img="$HOME/.config/macchina/tux.png"
+if [ -t 1 ] && [ -n "$KITTY_WINDOW_ID" ] && [ -f "$img" ]; then
+  printf '\n\033_Ga=T,f=100,t=f,c=24,r=12,C=1,q=2;%s\033\\' "$(printf %s "$img" | base64 -w0)"
+fi
+exec $real "$@"

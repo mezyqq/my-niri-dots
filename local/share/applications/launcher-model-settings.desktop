@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Модель лаунчера
+Comment=Предпросмотр и настройки 3D-модели в лаунчере
+Exec=qs ipc -c serplauncher call modelsettings open
+Icon=preferences-desktop-theme
+Categories=Settings;

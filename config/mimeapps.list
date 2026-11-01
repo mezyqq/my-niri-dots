@@ -1,0 +1,39 @@
+[Default Applications]
+x-scheme-handler/http=waterfox.desktop
+x-scheme-handler/https=waterfox.desktop
+x-scheme-handler/chrome=waterfox.desktop
+text/html=waterfox.desktop
+application/x-extension-htm=waterfox.desktop
+application/x-extension-html=waterfox.desktop
+application/x-extension-shtml=waterfox.desktop
+application/xhtml+xml=waterfox.desktop
+application/x-extension-xhtml=waterfox.desktop
+application/x-extension-xht=waterfox.desktop
+video/mp4=vlc.desktop
+x-scheme-handler/tg=userapp-AyuGram Desktop-QC56X3.desktop
+x-scheme-handler/tonsite=userapp-AyuGram Desktop-0HC7X3.desktop
+application/pdf=waterfox.desktop
+application/zip=xarchiver.desktop
+application/x-zip-compressed=xarchiver.desktop
+application/x-7z-compressed=xarchiver.desktop
+application/x-rar=xarchiver.desktop
+application/vnd.rar=xarchiver.desktop
+application/x-tar=xarchiver.desktop
+application/x-compressed-tar=xarchiver.desktop
+application/gzip=xarchiver.desktop
+
+[Added Associations]
+x-scheme-handler/http=waterfox.desktop;xfce4-web-browser.desktop;
+x-scheme-handler/https=waterfox.desktop;xfce4-web-browser.desktop;
+x-scheme-handler/chrome=waterfox.desktop;userapp-Waterfox-PIXNX3.desktop;
+text/html=userapp-Waterfox-PIXNX3.desktop;waterfox.desktop;
+application/x-extension-htm=userapp-Waterfox-PIXNX3.desktop;waterfox.desktop;
+application/x-extension-html=userapp-Waterfox-PIXNX3.desktop;waterfox.desktop;
+application/x-extension-shtml=userapp-Waterfox-PIXNX3.desktop;waterfox.desktop;
+application/xhtml+xml=userapp-Waterfox-PIXNX3.desktop;waterfox.desktop;
+application/x-extension-xhtml=userapp-Waterfox-PIXNX3.desktop;waterfox.desktop;
+application/x-extension-xht=userapp-Waterfox-PIXNX3.desktop;waterfox.desktop;
+application/x-shellscript=nvim.desktop;
+video/mp4=vlc.desktop;
+x-scheme-handler/tg=userapp-AyuGram Desktop-QC56X3.desktop;
+x-scheme-handler/tonsite=userapp-AyuGram Desktop-0HC7X3.desktop;

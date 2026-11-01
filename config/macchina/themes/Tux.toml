@@ -1,0 +1,33 @@
+# colors/keys copied from ~/.config/fastfetch/config.jsonc
+spacing = 2
+padding = 28
+hide_ascii = true
+separator = " "
+key_color = "#abc7fb"
+separator_color = "#bdc7dd"
+
+[box]
+visible = false
+
+[palette]
+type = "Full"
+glyph = " ● "
+visible = true
+
+[bar]
+visible = false
+
+
+[keys]
+host = " Host"
+cpu = "󰍛 CPU"
+gpu = "󰢮 GPU"
+memory = "󰘚 RAM"
+disk_space = "󰋊 Disk"
+os = " OS"
+kernel = "󰒋 Kernel"
+shell = "󰆍 Shell"
+de = "󰖲 DE"
+wm = "󰖳 WM"
+packages = "󰏖 Packages"
+uptime = "󰔚 Uptime"

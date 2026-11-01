@@ -1,0 +1,730 @@
+// Этот конфиг написан в формате KDL: https://kdl.dev
+// "/-" закомментировывает следующий за ним узел целиком.
+// Полное описание настроек есть в вики:
+// https://niri-wm.github.io/niri/Configuration:-Introduction
+
+// Настройка устройств ввода.
+// Полный список опций есть в вики:
+// https://niri-wm.github.io/niri/Configuration:-Input
+input {
+    keyboard {
+        xkb {
+            // Можно задать rules, model, layout, variant и options.
+            // Подробнее см. xkeyboard-config(7).
+
+            // Например:
+            // layout "us,ru"
+            // options "grp:win_space_toggle,compose:ralt,ctrl:nocaps"
+
+            // Если эта секция пустая, niri возьмёт настройки xkb
+            // из org.freedesktop.locale1. Их можно менять командой
+            // localectl set-x11-keymap.
+            layout "us,ru"
+        }
+
+        // Включать NumLock при запуске; если убрать эту строку, он будет выключен.
+        numlock
+    }
+
+    // Дальше идут настройки libinput.
+    // Если опция не указана, она выключена или имеет значение по умолчанию.
+    // Все закомментированные опции здесь — примеры, а не значения по умолчанию.
+    touchpad {
+        // off
+        tap
+        // dwt
+        // dwtp
+        // drag false
+        // drag-lock
+        natural-scroll
+        // accel-speed 0.2
+        // accel-profile "flat"
+        // scroll-method "two-finger"
+        // disabled-on-external-mouse
+    }
+
+    mouse {
+        //  off
+        // natural-scroll
+        // accel-speed 0.2
+        // accel-profile "flat"
+        // scroll-method "no-scroll"
+    }
+
+    trackpoint {
+        // off
+        // natural-scroll
+         accel-speed 0.45
+        // accel-profile "flat"
+        // scroll-method "on-button-down"
+        // scroll-button 273
+        // scroll-button-lock
+        // middle-emulation
+    }
+
+    // Раскомментируй, чтобы курсор переносился в центр окна, получившего фокус.
+    // warp-mouse-to-focus
+
+    // Фокус автоматически переходит на окно или монитор под курсором.
+    // max-scroll-amount="0%" — только на окна, которые уже целиком видны на экране.
+    focus-follows-mouse max-scroll-amount="0%"
+}
+
+// Мониторы настраиваются по имени; имена можно узнать
+// командой `niri msg outputs` внутри запущенного niri.
+// Встроенный экран ноутбука обычно называется "eDP-1".
+// Подробнее в вики:
+// https://niri-wm.github.io/niri/Configuration:-Outputs
+// Не забудь раскомментировать узел, убрав "/-"!
+/-output "eDP-1" {
+    // Раскомментируй эту строку, чтобы выключить этот монитор.
+    // off
+
+    // Разрешение и (необязательно) частота обновления монитора.
+    // Формат: "<ширина>x<высота>" или "<ширина>x<высота>@<частота>".
+    // Если частота не указана, niri выберет максимальную
+    // для этого разрешения.
+    // Если режим не указан вовсе или неверный, niri выберет его сам.
+    // `niri msg outputs` внутри niri покажет все мониторы и их режимы.
+    mode "1920x1080@120.030"
+
+    // Масштаб может быть целым или дробным, например 1.5 — это 150%.
+    scale 2
+
+    // Поворот монитора против часовой стрелки, допустимые значения:
+    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 и flipped-270.
+    transform "normal"
+
+    // Положение монитора в общем пространстве координат.
+    // Влияет на действия по направлению вроде "focus-monitor-left" и на перемещение курсора.
+    // Курсор может переходить только между вплотную соседними мониторами.
+    // При расстановке учитывай масштаб и поворот:
+    // размеры мониторов считаются в логических (масштабированных) пикселях.
+    // Например, монитор 3840×2160 с масштабом 2.0 имеет логический размер 1920×1080,
+    // поэтому чтобы поставить другой монитор вплотную справа, задай ему x=1920.
+    // Если положение не задано или мониторы перекрываются, niri расставит их
+    // автоматически.
+    position x=1280 y=0
+}
+
+// Экран ноутбука, разогнанный до 95 Гц. Режим берётся из подменённого EDID
+// /lib/firmware/edid/lgd-eDP-85hz.bin (drm.edid_firmware в параметрах ядра):
+// i915 не даёт ставить на eDP частоты, которых нет в EDID.
+// Если режима нет, niri сам выберет стандартные 60 Гц.
+output "eDP-1" {
+    mode "1920x1080@94.998"
+}
+
+// Настройки расположения и размеров окон.
+// Подробнее в вики:
+// https://niri-wm.github.io/niri/Configuration:-Layout
+layout {
+    // Отступы вокруг окон в логических пикселях.
+    gaps 16
+
+    // Когда центрировать колонку при смене фокуса:
+    // - "never" — по умолчанию; колонка за краем экрана при фокусе
+    //   встаёт к левому или правому краю.
+    // - "always" — колонка в фокусе всегда по центру.
+    // - "on-overflow" — колонка центрируется, если не помещается
+    //   на экране вместе с предыдущей колонкой в фокусе.
+    center-focused-column "never"
+
+    // Ширины, между которыми переключает "switch-preset-column-width" (Mod+R).
+    preset-column-widths {
+        // proportion задаёт ширину как долю ширины монитора с учётом отступов.
+        // Например, четыре окна "proportion 0.25" ровно помещаются на экране.
+        // По умолчанию это 1/3, 1/2 и 2/3 ширины монитора.
+        proportion 0.33333333333
+        proportion 0.6
+        proportion 0.6666667
+
+        // fixed задаёт точную ширину в логических пикселях.
+        // fixed 1920
+    }
+
+    // Также можно задать высоты для "switch-preset-window-height" (Mod+Ctrl+Shift+R).
+    // preset-window-heights { }
+
+    // Ширина новых окон по умолчанию.
+    default-column-width { proportion 0.5; }
+    // Если оставить скобки пустыми, окна сами выберут начальную ширину.
+    // default-column-width {}
+
+    // По умолчанию рамка фокуса и граница рисуются сплошным прямоугольником
+    // за окном, поэтому они просвечивают через полупрозрачные окна.
+    // Так сделано потому, что окна с клиентскими декорациями (CSD) могут быть любой формы.
+    //
+    // Если это мешает, раскомментируй `prefer-no-csd` ниже.
+    // Тогда niri будет рисовать рамку и границу *вокруг* окон, которые согласились
+    // отказаться от клиентских декораций.
+    //
+    // Либо можно переопределить это правилом окна
+    // `draw-border-with-background`.
+
+    // Внешний вид рамки фокуса.
+    focus-ring {
+        // Раскомментируй эту строку, чтобы выключить рамку фокуса.
+        // off
+
+        // На сколько логических пикселей рамка выступает за окно.
+        width 4
+
+        // Цвета можно задавать по-разному:
+        // - именованные цвета CSS: "red"
+        // - RGB hex: "#rgb", "#rgba", "#rrggbb", "#rrggbbaa"
+        // - запись как в CSS: "rgb(255, 127, 0)", rgba(), hsl() и некоторые другие.
+
+        // Цвет рамки на активном мониторе.
+        active-color "#7fc8ff"
+
+        // Цвет рамки на неактивных мониторах.
+        //
+        // Рамка фокуса рисуется только вокруг активного окна, поэтому
+        // inactive-color виден только на других мониторах.
+        inactive-color "#505050"
+
+        // Можно использовать градиенты, они важнее сплошных цветов.
+        // Градиенты рисуются так же, как CSS linear-gradient(angle, from, to).
+        // Угол такой же, как в linear-gradient, и необязателен;
+        // по умолчанию 180 (сверху вниз).
+        // Для подбора подойдёт любой онлайн-генератор CSS linear-gradient.
+        // Можно менять и цветовое пространство, подробнее в вики.
+        //
+        // active-gradient from="#80c8ff" to="#c7ff7f" angle=45
+
+        // Градиент можно считать относительно всего рабочего стола,
+        // а не только самого окна.
+        // Для этого задай relative-to="workspace-view".
+        //
+        // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
+    }
+
+    // Граница окна: похожа на рамку фокуса, но видна всегда.
+    border {
+        // Настройки те же, что у рамки фокуса.
+        // Если включаешь границу, рамку фокуса, скорее всего, стоит выключить.
+        off
+
+        width 4
+        active-color "#ffc87f"
+        inactive-color "#505050"
+
+        // Цвет границы у окон, которые требуют внимания.
+        urgent-color "#9b0000"
+
+        // Градиенты могут использовать разные цветовые пространства для интерполяции.
+        // Например, это пастельная радуга через in="oklch longer hue".
+        //
+        // active-gradient from="#e5989b" to="#ffb4a2" angle=45 relative-to="workspace-view" in="oklch longer hue"
+
+        // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
+    }
+
+    // Тени под окнами.
+    shadow {
+        // Раскомментируй следующую строку, чтобы включить тени.
+        // on
+
+        // По умолчанию тень рисуется только вокруг окна, а не за ним.
+        // Раскомментируй эту настройку, чтобы тень рисовалась и за окном.
+        //
+        // niri не знает радиус скругления углов CSD-окон и считает
+        // углы прямыми, из-за чего внутри скруглённых углов появляются
+        // артефакты тени. Эта настройка их убирает.
+        //
+        // Вместо неё можно задать prefer-no-csd и/или
+        // geometry-corner-radius. Тогда niri будет знать радиус и
+        // нарисует тень правильно, без рисования за окном. Заодно
+        // пропадут тени, которые окно рисует само.
+        //
+        // draw-behind-window true
+
+        // Внешний вид тени. Значения ниже — в логических пикселях,
+        // как у свойств CSS box-shadow.
+
+        // softness — радиус размытия тени.
+        softness 30
+
+        // spread — расширение тени.
+        spread 5
+
+        // offset — смещение тени относительно окна.
+        offset x=0 y=5
+
+        // Цвет и прозрачность тени.
+        color "#0007"
+    }
+
+    // Struts уменьшают область под окна, как панели layer-shell.
+    // По сути это внешние отступы, в логических пикселях.
+    // Левый и правый strut оставляют соседнее окно всегда видимым сбоку.
+    // Верхний и нижний просто добавляют внешний отступ к месту под
+    // панели layer-shell и обычным отступам.
+    struts {
+        // left 64
+        // right 64
+        // top 64
+        // bottom 64
+    }
+}
+
+// Такие строки запускают программы при старте niri.
+// Если niri запущен как сессия, он поддерживает xdg-desktop-autostart,
+// что может быть удобнее.
+// Больше примеров spawn — в секции binds ниже.
+
+// Эта строка запускает waybar — популярную панель для Wayland-композиторов.
+// spawn-at-startup "waybar"
+spawn-at-startup "noctalia"
+spawn-at-startup "qs" "-c" "serplauncher"
+
+// Окно настроек Noctalia открывается плавающим.
+window-rule {
+    match app-id="dev.noctalia.Noctalia"
+    open-floating true
+    default-column-width { fixed 1080; }
+    default-window-height { fixed 920; }
+}
+
+debug {
+    // Разрешает действия из уведомлений и активацию окон из Noctalia.
+    honor-xdg-activation-with-invalid-serial
+}
+
+// Чтобы запустить команду оболочки (с переменными, пайпами и т. п.), используй spawn-sh-at-startup:
+// spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
+
+hotkey-overlay {
+    // Раскомментируй, чтобы окно «Важные горячие клавиши» не показывалось при запуске.
+    // skip-at-startup
+}
+
+// Раскомментируй, чтобы просить программы по возможности не рисовать свои декорации (CSD).
+// Если программа явно требует CSD, просьба будет выполнена.
+// Кроме того, программам сообщается, что они в тайлинге, и часть скруглённых углов пропадёт.
+// Это также исправляет отрисовку границы/рамки фокуса за полупрозрачными окнами.
+// После включения или выключения перезапусти программы, чтобы изменения применились.
+// prefer-no-csd
+
+// Путь, куда сохраняются скриншоты.
+// ~ в начале заменяется на домашнюю папку.
+// Путь форматируется через strftime(3), чтобы подставить дату и время скриншота.
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+// Можно задать null, чтобы скриншоты не сохранялись на диск.
+// screenshot-path null
+
+// Настройки анимаций.
+// Как настроить отдельные анимации, описано в вики:
+// https://niri-wm.github.io/niri/Configuration:-Animations
+animations {
+    // Раскомментируй, чтобы выключить все анимации.
+    // off
+
+    // Замедлить все анимации во столько раз. Значения меньше 1 их ускоряют.
+    // slowdown 3.0
+
+    // Без прокрутки вида: иначе оверлей flameshot (новая колонка) въезжает сбоку.
+    horizontal-view-movement {
+        off
+    }
+
+    // Стандартное открытие (рост + проявление), но окна, открытые сразу на весь экран
+    // (оверлей flameshot), появляются мгновенно — в niri нет отключения анимации для одного окна.
+    window-open {
+        custom-shader r"
+            vec4 open_color(vec3 coords_geo, vec3 size_geo) {
+                // shortcut: порог под экран 1536x864 логических (1920x1080 @1.25), поменяй при другом масштабе.
+                if (size_geo.x >= 1530.0 && size_geo.y >= 860.0) {
+                    return texture2D(niri_tex, (niri_geo_to_tex * coords_geo).st);
+                }
+                float scale = niri_clamped_progress / 2.0 + 0.5;
+                coords_geo = vec3((coords_geo.xy - vec2(0.5)) / scale + vec2(0.5), 1.0);
+                vec4 color = texture2D(niri_tex, (niri_geo_to_tex * coords_geo).st);
+                if (coords_geo.x < 0.0 || 1.0 < coords_geo.x || coords_geo.y < 0.0 || 1.0 < coords_geo.y) {
+                    color = vec4(0.0);
+                }
+                return color * niri_clamped_progress;
+            }
+        "
+    }
+}
+
+// Правила окон позволяют менять поведение отдельных окон.
+// Подробнее в вики:
+// https://niri-wm.github.io/niri/Configuration:-Window-Rules
+
+// Обход бага WezTerm с начальной настройкой окна:
+// задаём пустой default-column-width.
+window-rule {
+    // Регулярное выражение специально сделано максимально точным,
+    // потому что это конфиг по умолчанию и ложные срабатывания не нужны.
+    // Можно обойтись просто app-id="wezterm".
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    default-column-width {}
+}
+
+// Окно настроек модели лаунчера — плавающее.
+window-rule {
+    match app-id=r#"^org\.quickshell$"# title="^Модель лаунчера$"
+    open-floating true
+}
+
+// Окно захвата Flameshot — на весь экран, поверх бара и других панелей (слой top).
+window-rule {
+    match app-id="^flameshot$" title="^flameshot$"
+    open-fullscreen true
+    open-focused true
+}
+
+// Окно «картинка в картинке» Firefox по умолчанию открывается плавающим.
+window-rule {
+    // Это регулярное выражение для app-id подходит для обоих вариантов:
+    // - обычный Firefox (app-id "firefox")
+    // - Firefox из Flatpak (app-id "org.mozilla.firefox")
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+// Пример: скрыть два менеджера паролей от захвата экрана.
+// (Это правило-пример закомментировано через "/-" в начале.)
+/-window-rule {
+    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+    match app-id=r#"^org\.gnome\.World\.Secrets$"#
+
+    block-out-from "screen-capture"
+
+    // Используй это вместо, если хочешь, чтобы они были видны в сторонних программах для скриншотов.
+    // block-out-from "screencast"
+}
+
+// Пример: скруглённые углы у всех окон.
+// (Это правило-пример закомментировано через "/-" в начале.)
+/-window-rule {
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
+
+binds {
+    // Noctalia: лаунчер, смена раскладки, центр управления, настройки.
+    Mod+Shift+Space { spawn-sh "noctalia msg panel-toggle launcher"; }
+    Mod+A hotkey-overlay-title="Файлы: Dolphin" { spawn "dolphin"; }
+    Mod+Space { switch-layout "next"; }
+    Mod+S { spawn-sh "noctalia msg panel-toggle control-center"; }
+    Mod+Shift+Comma { spawn-sh "noctalia msg settings-toggle"; }
+
+    // Сочетание — это модификаторы через +, а в конце имя клавиши XKB.
+    // Узнать имя XKB для клавиши можно программой
+    // вроде wev.
+    //
+    // "Mod" — особый модификатор: Super при запуске с TTY и Alt,
+    // когда niri запущен окном внутри другой сессии (winit).
+    //
+    // Большинство действий отсюда можно вызвать и из командной строки:
+    // `niri msg action do-something`.
+
+    // Mod-Shift-/ (обычно это то же, что Mod-?)
+    // показывает список важных горячих клавиш.
+    Mod+Shift+Slash { show-hotkey-overlay; }
+
+    // Запуск программ: терминал, лаунчер приложений, блокировка экрана.
+    Mod+T hotkey-overlay-title="Открыть терминал: kitty" { spawn "kitty"; }
+    // Лаунчер из Serpantinum (Quickshell): приложения, файлы, эмодзи; слева модель из ~/launcher-model.
+    Mod+D hotkey-overlay-title="Запустить приложение" { spawn "qs" "ipc" "-c" "serplauncher" "call" "launcher" "toggle"; }
+    Super+Alt+L hotkey-overlay-title="Заблокировать экран: swaylock" { spawn "swaylock"; }
+
+    // spawn-sh запускает команду оболочки. Нужно для пайпов, нескольких команд и т. п.
+    // Вся команда — один аргумент, она передаётся в `sh -c` как есть.
+    // Например, стандартное сочетание для включения/выключения экранного диктора (orca).
+    Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
+
+    // Клавиши громкости для PipeWire и WirePlumber.
+    // allow-when-locked=true — работают даже на заблокированном экране.
+    // spawn-sh позволяет передать команду сразу с аргументами.
+    // "-l 1.0" ограничивает громкость сотней процентов.
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
+    XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+    XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+
+    // Медиаклавиши через playerctl.
+    // Работают с любым плеером, поддерживающим MPRIS.
+    XF86AudioPlay        allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    XF86AudioStop        allow-when-locked=true { spawn-sh "playerctl stop"; }
+    XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
+    XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
+
+    // Клавиши яркости через brightnessctl.
+    // Можно использовать и обычный spawn с несколькими аргументами (без "sh"),
+    // но тогда каждый аргумент пишется в отдельных кавычках "".
+    XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+
+    // Открыть/закрыть обзор: уменьшенный вид рабочих столов и окон.
+    // Ещё можно увести курсор в левый верхний угол
+    // или провести четырьмя пальцами вверх по тачпаду.
+    Mod+O repeat=false { toggle-overview; }
+
+    // Закрыть окно.
+    Mod+Q repeat=false { close-window; }
+
+    // Переключить фокус: стрелки или H/J/K/L (влево/вниз/вверх/вправо).
+    Mod+Left  { focus-column-left; }
+    Mod+Down  { focus-window-down; }
+    Mod+Up    { focus-window-up; }
+    Mod+Right { focus-column-right; }
+    Mod+H     { focus-column-left; }
+    Mod+J     { focus-window-down; }
+    Mod+K     { focus-window-up; }
+    Mod+L     { focus-column-right; }
+
+    // Переместить колонку или окно в ту же сторону.
+    Mod+Ctrl+Left  { move-column-left; }
+    Mod+Ctrl+Down  { move-window-down; }
+    Mod+Ctrl+Up    { move-window-up; }
+    Mod+Ctrl+Right { move-column-right; }
+    Mod+Ctrl+H     { move-column-left; }
+    Mod+Ctrl+J     { move-window-down; }
+    Mod+Ctrl+K     { move-window-up; }
+    Mod+Ctrl+L     { move-column-right; }
+
+    // Альтернативные команды: при достижении первого или последнего окна
+    // в колонке переходят на соседний рабочий стол.
+    // Mod+J     { focus-window-or-workspace-down; }
+    // Mod+K     { focus-window-or-workspace-up; }
+    // Mod+Ctrl+J     { move-window-down-or-to-workspace-down; }
+    // Mod+Ctrl+K     { move-window-up-or-to-workspace-up; }
+
+    // Фокус на первую/последнюю колонку и перенос колонки в начало/конец.
+    Mod+Home { focus-column-first; }
+    Mod+End  { focus-column-last; }
+    Mod+Ctrl+Home { move-column-to-first; }
+    Mod+Ctrl+End  { move-column-to-last; }
+
+    // Переключить фокус на соседний монитор.
+    Mod+Shift+Left  { focus-monitor-left; }
+    Mod+Shift+Down  { focus-monitor-down; }
+    Mod+Shift+Up    { focus-monitor-up; }
+    Mod+Shift+Right { focus-monitor-right; }
+    Mod+Shift+H     { focus-monitor-left; }
+    Mod+Shift+J     { focus-monitor-down; }
+    Mod+Shift+K     { focus-monitor-up; }
+    Mod+Shift+L     { focus-monitor-right; }
+
+    // Перенести колонку на соседний монитор.
+    Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
+    Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
+    Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
+    Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
+    Mod+Shift+Ctrl+H     { move-column-to-monitor-left; }
+    Mod+Shift+Ctrl+J     { move-column-to-monitor-down; }
+    Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
+    Mod+Shift+Ctrl+L     { move-column-to-monitor-right; }
+
+    // Есть и команды для переноса только одного окна:
+    // Mod+Shift+Ctrl+Left  { move-window-to-monitor-left; }
+    // ...
+
+    // А ещё можно перенести на другой монитор весь рабочий стол:
+    // Mod+Shift+Ctrl+Left  { move-workspace-to-monitor-left; }
+    // ...
+
+    // Переключить рабочий стол вниз/вверх и перенести туда колонку (с Ctrl).
+    Mod+Page_Down      { focus-workspace-down; }
+    Mod+Page_Up        { focus-workspace-up; }
+    Mod+U              { focus-workspace-down; }
+    Mod+I              { focus-workspace-up; }
+    Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
+    Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
+    Mod+Ctrl+U         { move-column-to-workspace-down; }
+    Mod+Ctrl+I         { move-column-to-workspace-up; }
+
+    // Есть и команды для переноса только одного окна:
+    // Mod+Ctrl+Page_Down { move-window-to-workspace-down; }
+    // ...
+
+    // Поменять порядок рабочих столов: сдвинуть текущий вниз/вверх.
+    Mod+Shift+Page_Down { move-workspace-down; }
+    Mod+Shift+Page_Up   { move-workspace-up; }
+    Mod+Shift+U         { move-workspace-down; }
+    Mod+Shift+I         { move-workspace-up; }
+
+    // Прокрутку колёсика мыши можно назначать так.
+    // Направление этих сочетаний зависит от настройки natural-scroll.
+    //
+    // Чтобы рабочие столы не пролистывались слишком быстро, есть
+    // свойство cooldown-ms: сочетание срабатывает не чаще этого интервала.
+    // cooldown-ms можно задать любому сочетанию, но полезнее всего оно для колёсика.
+    Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
+    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
+
+    // Горизонтальная прокрутка: фокус и перенос колонок влево/вправо.
+    Mod+WheelScrollRight      { focus-column-right; }
+    Mod+WheelScrollLeft       { focus-column-left; }
+    Mod+Ctrl+WheelScrollRight { move-column-right; }
+    Mod+Ctrl+WheelScrollLeft  { move-column-left; }
+
+    // Обычно прокрутка с Shift в программах листает по горизонтали;
+    // эти сочетания делают так же.
+    Mod+Shift+WheelScrollDown      { focus-column-right; }
+    Mod+Shift+WheelScrollUp        { focus-column-left; }
+    Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
+    Mod+Ctrl+Shift+WheelScrollUp   { move-column-left; }
+
+    // Так же можно назначать «щелчки» прокрутки тачпада.
+    // Прокрутка тачпадом непрерывная, поэтому для этих сочетаний она
+    // делится на отдельные шаги.
+    // На них тоже влияет natural-scroll тачпада, поэтому эти
+    // примеры «перевёрнуты»: natural-scroll для тачпадов включён
+    // по умолчанию.
+    // Mod+TouchpadScrollDown { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.02+"; }
+    // Mod+TouchpadScrollUp   { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.02-"; }
+
+    // К рабочим столам можно обращаться по номеру. Но учти, что
+    // рабочие столы в niri динамические, поэтому эти команды работают
+    // «по мере возможности». Номер больше текущего числа рабочих столов
+    // означает самый нижний (пустой) рабочий стол.
+    //
+    // Например, при 2 рабочих столах + 1 пустом номера 3, 4, 5 и дальше
+    // все ведут на 3-й рабочий стол.
+    // Mod+цифра — перейти на рабочий стол, Mod+Ctrl+цифра — перенести туда колонку.
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+    Mod+Ctrl+1 { move-column-to-workspace 1; }
+    Mod+Ctrl+2 { move-column-to-workspace 2; }
+    Mod+Ctrl+3 { move-column-to-workspace 3; }
+    Mod+Ctrl+4 { move-column-to-workspace 4; }
+    Mod+Ctrl+5 { move-column-to-workspace 5; }
+    Mod+Ctrl+6 { move-column-to-workspace 6; }
+    Mod+Ctrl+7 { move-column-to-workspace 7; }
+    Mod+Ctrl+8 { move-column-to-workspace 8; }
+    Mod+Ctrl+9 { move-column-to-workspace 9; }
+
+    // Есть и команды для переноса только одного окна:
+    // Mod+Ctrl+1 { move-window-to-workspace 1; }
+
+    // Переключение между текущим и предыдущим рабочим столом.
+    // Mod+Tab { focus-workspace-previous; }
+
+    // Эти сочетания перемещают окно в колонку и из неё.
+    // Если окно одно, оно вливается в соседнюю колонку сбоку.
+    // Если окно уже в колонке, оно выталкивается из неё.
+    Mod+BracketLeft  { consume-or-expel-window-left; }
+    Mod+BracketRight { consume-or-expel-window-right; }
+
+    // Забрать одно окно справа в низ текущей колонки.
+    Mod+Comma  { consume-window-into-column; }
+    // Вытолкнуть нижнее окно из текущей колонки вправо.
+    Mod+Period { expel-window-from-column; }
+
+    // Перебор ширин из preset-column-widths.
+    Mod+R { switch-preset-column-width; }
+    // Перебор в обратном порядке тоже есть.
+    Mod+Shift+R { switch-preset-column-width-back; }
+
+    // Перебор высот окна из preset-window-heights и сброс высоты.
+    Mod+Ctrl+Shift+R { switch-preset-window-height; }
+    Mod+Ctrl+R { reset-window-height; }
+
+    // Развернуть колонку на всю ширину / окно на весь экран.
+    Mod+F { maximize-column; }
+    Mod+Shift+F { fullscreen-window; }
+
+    // maximize-column оставляет вокруг окна отступы и границы,
+    // а maximize-window-to-edges — нет: окно растягивается до краёв экрана.
+    // Это соответствует обычному разворачиванию окна,
+    // например двойным щелчком по заголовку.
+    Mod+M { maximize-window-to-edges; }
+
+    // Растянуть колонку в фокусе на место, не занятое другими полностью видимыми колонками.
+    // То есть колонка «заполняет всё оставшееся место».
+    Mod+Ctrl+F { expand-column-to-available-width; }
+
+    // Поставить колонку в фокусе по центру экрана.
+    Mod+C { center-column; }
+
+    // Отцентрировать на экране все полностью видимые колонки.
+    Mod+Ctrl+C { center-visible-columns; }
+
+    // Точная подстройка ширины.
+    // Эта команда также умеет:
+    // * задать ширину в пикселях: "1000"
+    // * изменить ширину в пикселях: "-5" или "+5"
+    // * задать ширину в процентах от ширины экрана: "25%"
+    // * изменить ширину в процентах от ширины экрана: "-10%" или "+10%"
+    // Пиксели логические (масштабированные): на мониторе с масштабом 2.0
+    // set-column-width "100" займёт 200 физических пикселей.
+    Mod+Minus { set-column-width "-10%"; }
+    Mod+Equal { set-column-width "+10%"; }
+
+    // Точная подстройка высоты, когда в колонке несколько окон.
+    Mod+Shift+Minus { set-window-height "-10%"; }
+    Mod+Shift+Equal { set-window-height "+10%"; }
+
+    // Перенести окно в плавающий слой и обратно / переключить фокус между слоями.
+    Mod+V       { toggle-window-floating; }
+    Mod+Shift+V { switch-focus-between-floating-and-tiling; }
+
+    // Включить/выключить режим вкладок для колонки.
+    // Окна в такой колонке показываются вертикальными вкладками,
+    // а не стопкой друг над другом.
+    Mod+Ctrl+W { toggle-column-tabbed-display; }
+    // Выбор обоев Noctalia; цвета обоев применяются как тема ко всем приложениям.
+    Mod+Shift+W hotkey-overlay-title="Выбрать обои" { spawn-sh "noctalia msg panel-toggle wallpaper"; }
+    // Открыть браузер.
+    Mod+W hotkey-overlay-title="Открыть браузер: waterfox" { spawn "waterfox"; }
+
+    // Действия для смены раскладки.
+    // Внимание: если раскомментируешь их, убедись, что в опциях xkb выше
+    // НЕТ такого же сочетания для смены раскладки.
+    // Если оба висят на одном сочетании, переключение сломается:
+    // раскладка сменится дважды (один раз через xkb, второй через niri).
+    // Mod+Space       { switch-layout "next"; }
+    // Mod+Shift+Space { switch-layout "prev"; }
+
+    // Скриншот с выбором области / всего экрана / окна.
+    Print { screenshot; }
+    Ctrl+Print { screenshot-screen; }
+    Alt+Print { screenshot-window; }
+    // Скриншот с редактором Flameshot; Enter — скопировать в буфер.
+    // XDG_CURRENT_DESKTOP=sway — иначе flameshot не узнаёт niri и не включает захват через grim.
+    // QT_SCALE_FACTOR=0.8 гасит масштаб 1.25 (1.25*0.8=1), иначе картинка в оверлее увеличена.
+    Mod+Shift+S hotkey-overlay-title="Скриншот: flameshot" { spawn-sh "qs ipc -c serplauncher call launcher hide; noctalia msg panel-close; XDG_CURRENT_DESKTOP=sway QT_SCALE_FACTOR=0.8 flameshot gui"; }
+
+    // Программы вроде клиентов удалённого рабочего стола и программных KVM могут
+    // попросить niri перестать обрабатывать заданные здесь сочетания,
+    // чтобы, например, передавать нажатия как есть на удалённую машину.
+    // Полезно назначить «аварийный выход», который переключает этот запрет,
+    // чтобы глючная программа не могла захватить твою сессию.
+    //
+    // Свойство allow-inhibiting=false можно ставить и другим сочетаниям:
+    // тогда niri обрабатывает их всегда, даже когда запрет активен.
+    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+
+    // Выход из niri; появится окно подтверждения, чтобы не выйти случайно.
+    Mod+Shift+E { quit; }
+    Ctrl+Alt+Delete { quit; }
+
+    // Выключает мониторы. Чтобы включить обратно, подвигай мышью
+    // или нажми любую другую клавишу.
+    Mod+Shift+P { power-off-monitors; }
+}
+
+// Размытие за полупрозрачным kitty.
+window-rule {
+    match app-id="kitty"
+    background-effect { blur true; }
+    draw-border-with-background false
+}
+
+include "noctalia.kdl"

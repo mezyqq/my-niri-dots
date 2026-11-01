@@ -1,0 +1,31 @@
+# fields (fetch's default set)
+os
+host
+kernel
+uptime
+packages
+shell
+display
+wm
+theme
+icons
+font
+cursor
+terminal
+cpu
+gpu
+memory
+swap
+disk
+ip
+battery
+locale
+colors
+
+# logo colored by the hyfetch flag (~/.config/hyfetch.json)
+hyfetch=1
+# horizontal stretch of the logo
+width=1.6
+
+# real 3D model extruded from this image (needs ImageMagick)
+model=~/.config/fetch/gentoo-model.png

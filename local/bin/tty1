@@ -1,0 +1,4 @@
+#!/bin/sh
+# Kill the graphical session and all your processes, then drop to a text login on tty1.
+# Runs as a transient root unit so it survives the death of the terminal it was started from.
+exec sudo systemd-run --collect sh -c "systemctl stop sddm; loginctl terminate-user $(id -un); systemctl start getty@tty1; chvt 1"

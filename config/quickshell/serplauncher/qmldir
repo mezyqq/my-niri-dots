@@ -1,0 +1,9 @@
+singleton ThemeBackend 1.0 singletons/ThemeBackend.qml
+singleton Config 1.0 singletons/Config.qml
+singleton LauncherController 1.0 singletons/LauncherController.qml
+singleton Caching 1.0 singletons/Caching.qml
+singleton Sounds 1.0 singletons/Sounds.qml
+Launcher 1.0 launcher/Launcher.qml
+singleton ModelStore 1.0 singletons/ModelStore.qml
+ModelSettings 1.0 launcher/ModelSettings.qml
+ModelView 1.0 launcher/ModelView.qml

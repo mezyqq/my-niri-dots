@@ -1,0 +1,35 @@
+#!/bin/sh
+real=$(PATH=$(printf %s "$PATH" | tr : '\n' | grep -vx "$(cd "$(dirname "$0")" && pwd)" | paste -sd:) command -v hyfetch) || { echo "hyfetch not installed" >&2; exit 127; }
+# hyfetch with the Gentoo image logo recolored by the current flag.
+# Re-renders it when the preset/config or source image changes.
+cfg="$HOME/.config/hyfetch.json"
+src="$HOME/.config/fastfetch/gentoo.png"
+out="$HOME/.cache/hyfetch-gentoo.png"
+
+if [ ! -f "$out" ] || [ "$cfg" -nt "$out" ] || [ "$src" -nt "$out" ]; then
+  # Flag stripes top to bottom, exactly as hyfetch paints them (preset + lightness).
+  # CLI --args overrides the config args, so this gets the ASCII logo, not the image.
+  stripes=""
+  for c in $($real -b fastfetch --distro gentoo \
+      --args='-c none -s break --pipe false' </dev/null 2>/dev/null |
+    grep -o '38;2;[0-9;]*m' |
+    awk -F'[;m]' '{c=sprintf("#%02x%02x%02x",$3,$4,$5)} c!=last{print c; last=c}'); do
+    stripes="$stripes -size 1x1 xc:$c"
+  done
+  if [ -n "$stripes" ]; then
+    mkdir -p "${out%/*}"
+    # stripes x original grayscale keeps the logo's 3D shading; alpha copied back
+    magick "$src" -write mpr:src +delete \
+      \( $stripes -append \
+         -scale "$(magick identify -format '%wx%h!' "$src")" +repage \) \
+      \( mpr:src -alpha off -colorspace gray -level 0,92% \) \
+      -compose multiply -composite \
+      \( mpr:src -alpha extract \) -alpha off -compose CopyOpacity -composite +repage -depth 8 \
+      "$out"
+  fi
+fi
+
+# Pass the image here, not via "args" in hyfetch.json: `hyfetch -c` rewrites
+# the config with args=null. An explicit --args (e.g. from fetch) wins.
+case " $* " in *" --args"*) exec $real "$@" ;; esac
+exec $real --args="--logo-type kitty-direct --logo $out" "$@"

@@ -1,0 +1,15 @@
+{
+    "autoCenter": true,
+    "bake": "auto",
+    "bob": true,
+    "bobAmount": 8,
+    "offsetX": -150,
+    "offsetY": -93,
+    "offsetZ": -57,
+    "rotX": 2,
+    "rotY": -10,
+    "rotZ": -2,
+    "scale": 1.1,
+    "spin": true,
+    "spinSeconds": 8
+}

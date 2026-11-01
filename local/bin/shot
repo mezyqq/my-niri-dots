@@ -1,0 +1,12 @@
+#!/bin/sh
+# Screenshot to ~/Pictures/Screenshots and the clipboard. `shot full` = whole screen, `shot` = select a region.
+dir="$HOME/Pictures/Screenshots"
+mkdir -p "$dir"
+file="$dir/$(date +%F_%H-%M-%S).png"
+if [ "${1-}" = full ]; then
+	grim "$file" || exit 1
+else
+	region=$(slurp) || exit 0
+	grim -g "$region" "$file" || exit 1
+fi
+wl-copy < "$file"
