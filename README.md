@@ -1,57 +1,59 @@
 # my-niri-dots :3
 
-Дотфайлы на базе **[Noctalia Shell](https://github.com/noctalia-dev/noctalia)**.
+**English** | [Русский](README.ru.md) | [Українська](README.uk.md)
 
-Мой рабочий стол на **niri** (Gentoo): шелл **noctalia**, все темы в системе синхронятся с главной палитрой обоев. Свой лаунчер на **quickshell** с 3D-моделью, **kitty** с блюром, а fetch-утилиты (**fastfetch**, **hyfetch**, **fetch**, ) показывают PNG-логотип Gentoo, перекрашенный в цвета флага.
+Dotfiles based on **[Noctalia Shell](https://github.com/noctalia-dev/noctalia)**.
 
-## Установка
+My **niri** desktop (Gentoo): **noctalia** shell, and every theme on the system follows the main color palette of the wallpaper. A custom **quickshell** launcher with a 3D model, **kitty** with blur, and fetch tools (**fastfetch**, **hyfetch**, **fetch**) that show a PNG Gentoo logo recolored in the flag colors.
+
+## Installation
 
 ```sh
 git clone https://github.com/mezyqq/my-niri-dots
 cd my-niri-dots
-./install-gentoo.sh   # или ./install-arch.sh, ./install-debian.sh, ./install-nix.sh
+./install-gentoo.sh   # or ./install-arch.sh, ./install-debian.sh, ./install-nix.sh
 ```
 
-Каждый скрипт ставит пакеты своим пакетным менеджером, а потом запускает `install/common.sh`. Тот:
-- копирует конфиги в `~/.config` (то, что там уже лежит, переносится в `~/.dotfiles-backup-<дата>`);
-- кладёт обои в `~/Pictures/Wallpapers`, видео-обои в `~/Videos/wallpaper`, 3D-модель лаунчера в `~/launcher-model`;
-- кладёт скрипты в `~/.local/bin` и собирает `fetch` из `fetch-src/`;
-- если noctalia ещё не установлена, собирает её из исходников (на Nix она ставится из своего flake).
+Each script installs packages with its distro's package manager and then runs `install/common.sh`, which:
+- copies configs to `~/.config` (anything already there is moved to `~/.dotfiles-backup-<date>`);
+- puts wallpapers in `~/Pictures/Wallpapers`, the video wallpaper in `~/Videos/wallpaper`, and the launcher's 3D model in `~/launcher-model`;
+- puts scripts in `~/.local/bin` and builds `fetch` from `fetch-src/`;
+- builds noctalia from source if it isn't installed yet (on Nix it comes from its own flake).
 
-Если нужны только файлы, без установки пакетов: `sh install/common.sh`.
+To copy only the files, without installing packages: `sh install/common.sh`.
 
-## Что внутри
+## What's inside
 
-| Путь | Что это |
+| Path | What it is |
 |---|---|
-| `config/niri` | `config.kdl` с русскими комментариями + `noctalia.kdl` (цвета) |
-| `config/noctalia`, `local/state/noctalia/settings.toml` | шаблоны noctalia (flameshot, лаунчер) и её настройки |
-| `config/quickshell/serplauncher` | лаунчер (Super+D) с 3D-моделью и эмодзи |
-| `config/kitty` | kitty с прозрачностью и темой noctalia |
-| `config/fastfetch`, `config/hyfetch.json`, `config/fetch`, `config/macchina` | fetch-утилиты с PNG-логотипом Gentoo / Tux |
-| `local/bin/hyfetch`, `local/bin/macchina` | обёртки: перекрашивают PNG-логотип в цвета флага / выводят картинку через kitty |
-| `local/bin/shot`, `tty1`, `3d-launcher` | скриншот через grim+slurp, выход в tty1, окно настроек модели лаунчера |
-| `fetch-src/` | форк [fetch](https://github.com/mezyqq/fetch-hyfetch): крутящаяся 3D-модель и цвета hyfetch |
-| `config/{fuzzel,rofi,flameshot,qt5ct,qt6ct,gtk-3.0,gtk-4.0,btop,zed,opencode,vesktop,waybar,neofetch}`, `kdeglobals`, `dolphinrc`, `mimeapps.list` | остальные конфиги и темы |
-| `home/.zshrc` | zsh: двухстрочный промпт, автоподсказки, команда `wallpaper <файл>` (копирует картинку в папку обоев) |
-| `wallpapers/`, `videos/` | обои |
+| `config/niri` | `config.kdl` (comments in Russian) + `noctalia.kdl` (colors) |
+| `config/noctalia`, `local/state/noctalia/settings.toml` | noctalia templates (flameshot, launcher) and its settings |
+| `config/quickshell/serplauncher` | launcher (Super+D) with a 3D model and emoji |
+| `config/kitty` | kitty with transparency and the noctalia theme |
+| `config/fastfetch`, `config/hyfetch.json`, `config/fetch`, `config/macchina` | fetch tools with a PNG Gentoo / Tux logo |
+| `local/bin/hyfetch`, `local/bin/macchina` | wrappers: recolor the PNG logo in the flag colors / draw the image through kitty |
+| `local/bin/shot`, `tty1`, `3d-launcher` | screenshot via grim+slurp, drop to tty1, launcher model settings window |
+| `fetch-src/` | a fork of [fetch](https://github.com/mezyqq/fetch-hyfetch): spinning 3D model and hyfetch colors |
+| `config/{fuzzel,rofi,flameshot,qt5ct,qt6ct,gtk-3.0,gtk-4.0,btop,zed,opencode,vesktop,waybar,neofetch}`, `kdeglobals`, `dolphinrc`, `mimeapps.list` | other configs and themes |
+| `home/.zshrc` | zsh: two-line prompt, autosuggestions, `wallpaper <file>` command (copies an image into the wallpapers folder) |
+| `wallpapers/`, `videos/` | wallpapers |
 
-## Горячие клавиши 
+## Keybindings
 
-| Клавиши | Действие |
+| Keys | Action |
 |---|---|
 | Super+T | kitty |
-| Super+D | лаунчер |
+| Super+D | launcher |
 | Super+A | Dolphin |
 | Super+W | Waterfox |
-| Super+S | центр управления noctalia |
-| Super+Shift+W | выбор обоев |
-| Super+Shift+S | скриншот (flameshot) |
+| Super+S | noctalia control center |
+| Super+Shift+W | wallpaper picker |
+| Super+Shift+S | screenshot (flameshot) |
 
-Полный список: Super+Shift+/ в niri.
+Full list: Super+Shift+/ in niri.
 
-## Заметки
-- Обёртки в `~/.local/bin` работают, только если эта папка стоит в `PATH` раньше `/usr/bin`.
-- На Debian/Ubuntu niri и quickshell могут отсутствовать в apt: скрипт покажет, чего не нашёл.
-- На NixOS niri лучше включить в системном конфиге: `programs.niri.enable = true;`.
-- В `.zshrc` плагины ищутся в `/usr/share/zsh/plugins/` (так на Arch и Gentoo). На Debian и Nix этот путь другой.
+## Notes
+- The wrappers in `~/.local/bin` only work if that folder comes before `/usr/bin` in `PATH`.
+- On Debian/Ubuntu, niri and quickshell may be missing from apt: the script lists what it couldn't find.
+- On NixOS, enable niri in the system config instead: `programs.niri.enable = true;`.
+- `.zshrc` looks for plugins in `/usr/share/zsh/plugins/` (the Arch and Gentoo path). Debian and Nix use a different path.
